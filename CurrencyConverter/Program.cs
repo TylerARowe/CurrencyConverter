@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CurrencyConverterLibrary;
 
 namespace CurrencyConverter
 {
@@ -11,9 +12,8 @@ namespace CurrencyConverter
         static void Main(string[] args)
         {
             double cashBalance = 5000.00;
-            double btcValue = 7480.00;
-            double ethValue = 586.15;
-            double lteValue = 119.04;
+
+            Currencies values = new Currencies(1, 7480.00, 586.15, 119.04);
 
             double btcBalance = 0;
             double ethBalance = 0;
@@ -42,9 +42,9 @@ namespace CurrencyConverter
                         break;
                     case ConsoleKey.B:
                         Console.WriteLine($"What would you like to purchase?:\n" +
-                            $"B) BTC({btcValue})\n" +
-                            $"E) ETC({ethValue})\n" +
-                            $"L) LTE({lteValue})\n" +
+                            $"B) BTC({values.BtcValue})\n" +
+                            $"E) ETC({values.EthValue})\n" +
+                            $"L) LTE({values.LteValue})\n" +
                             $"X) EXIT\n\n");
                         ConsoleKey purchaseChoice = Console.ReadKey(true).Key;
                         Console.Clear();
@@ -54,10 +54,10 @@ namespace CurrencyConverter
                             switch (purchaseChoice)
                             {
                                 case ConsoleKey.B:
-                                    if (cashBalance >= btcValue)
+                                    if (cashBalance >= values.BtcValue)
                                     {
-                                        cashBalance -= btcValue;
-                                        btcValue++;
+                                        cashBalance -= values.BtcValue;
+                                        values.BtcValue++;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New BTC Balance is: {btcBalance}\n\n");
                                     }
@@ -68,10 +68,10 @@ namespace CurrencyConverter
                                     purchaseReload = true;
                                     break;
                                 case ConsoleKey.E:
-                                    if (cashBalance >= ethValue)
+                                    if (cashBalance >= values.EthValue)
                                     {
-                                        cashBalance -= ethValue;
-                                        ethValue++;
+                                        cashBalance -= values.EthValue;
+                                        values.EthValue++;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New ETH Balance is: {ethBalance}\n\n");
                                     }
@@ -82,10 +82,10 @@ namespace CurrencyConverter
                                     purchaseReload = true;
                                     break;
                                 case ConsoleKey.L:
-                                    if (cashBalance >= lteValue)
+                                    if (cashBalance >= values.LteValue)
                                     {
-                                        cashBalance -= lteValue;
-                                        lteValue++;
+                                        cashBalance -= values.LteValue;
+                                        values.LteValue++;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New LTE Balance is: {lteBalance}\n\n");
                                     }
@@ -107,9 +107,9 @@ namespace CurrencyConverter
                         break;
                     case ConsoleKey.S:
                         Console.WriteLine($"What would you like to sell?:\n" +
-                            $"B) BTC({btcValue})\n" +
-                            $"E) ETC({ethValue})\n" +
-                            $"L) LTE({lteValue})\n" +
+                            $"B) BTC({values.BtcValue})\n" +
+                            $"E) ETC({values.EthValue})\n" +
+                            $"L) LTE({values.LteValue})\n" +
                             $"X) EXIT\n\n");
                         ConsoleKey sellChoice = Console.ReadKey(true).Key;
                         Console.Clear();
@@ -119,10 +119,10 @@ namespace CurrencyConverter
                             switch (sellChoice)
                             {
                                 case ConsoleKey.B:
-                                    if (btcValue >= 1)
+                                    if (values.BtcValue >= 1)
                                     {
-                                        cashBalance += btcValue;
-                                        btcValue--;
+                                        cashBalance += values.BtcValue;
+                                        values.BtcValue--;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New BTC Balance is: {btcBalance}\n\n");
                                     }
@@ -133,10 +133,10 @@ namespace CurrencyConverter
                                     sellReload = true;
                                     break;
                                 case ConsoleKey.E:
-                                    if (ethValue >= 1)
+                                    if (values.EthValue >= 1)
                                     {
-                                        cashBalance += ethValue;
-                                        ethValue--;
+                                        cashBalance += values.EthValue;
+                                        values.EthValue--;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New ETH Balance is: {ethBalance}\n\n");
                                     }
@@ -147,10 +147,10 @@ namespace CurrencyConverter
                                     sellReload = true;
                                     break;
                                 case ConsoleKey.L:
-                                    if (lteValue >= 1)
+                                    if (values.LteValue >= 1)
                                     {
-                                        cashBalance += lteValue;
-                                        lteValue--;
+                                        cashBalance += values.LteValue;
+                                        values.LteValue--;
                                         Console.WriteLine($"New Cash Balance is: {cashBalance}\n" +
                                             $"New LTE Balance is: {lteBalance}\n\n");
                                     }
@@ -172,13 +172,55 @@ namespace CurrencyConverter
                         break;
                     case ConsoleKey.T:
                         Console.WriteLine($"Choose a currency to transfer to:\n" +
-                            $"B) BTC({btcValue})\n" +
-                            $"E) ETC({ethValue})\n" +
-                            $"L) LTE({lteValue})\n" +
+                            $"B) BTC({values.BtcValue})\n" +
+                            $"E) ETC({values.EthValue})\n" +
+                            $"L) LTE({values.LteValue})\n" +
                             $"X) EXIT\n\n");
                         ConsoleKey transferChoice = Console.ReadKey(true).Key;
                         Console.Clear();
-                        bool transferReload = false;
+                        bool transferChoiceReload = false;
+                        do
+                        {
+                            Console.WriteLine($"Choose a currency to transfer from:\n" +
+                            $"B) BTC({values.BtcValue})\n" +
+                            $"E) ETC({values.EthValue})\n" +
+                            $"L) LTE({values.LteValue})\n" +
+                            $"X) EXIT\n\n");
+                            ConsoleKey transferChoice2 = Console.ReadKey(true).Key;
+                            Console.Clear();
+                            bool transferReload = false;
+                            do
+                            {
+                                switch (transferChoice2)
+                                {
+                                    case ConsoleKey.B:
+                                        if (transferChoice == ConsoleKey.E)
+                                        {
+                                            double temp = 0;
+                                             temp = values.BtcValue * btcBalance;
+                                            ethBalance = temp / values.EthValue;
+                                            Console.WriteLine($"Your new ETH Balance is: {ethBalance}");
+                                        }
+                                        else if (transferChoice == ConsoleKey.L)
+                                        {
+                                            double temp2 = 0;
+                                            temp2 = values.BtcValue * btcBalance;
+                                            lteBalance = temp2 / values.LteValue;
+                                            Console.WriteLine($"Your new LTE Balance is: {lteBalance}");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Ivalid conversion.");
+                                        }
+                                        transferReload = true;
+                                        break;
+                                    default:
+                                        Console.WriteLine("Invalid Choice, please try again.");
+                                        break;
+                                }
+                            } while (!transferReload);
+                        } while (!transferChoiceReload);
+
                         break;
                 }
 
